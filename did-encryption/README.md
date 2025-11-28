@@ -9,16 +9,16 @@ allows you to:
 - Let Bob decrypt the re-encrypted ciphertext using his own secret key.
 - Optionally encrypt data streams in fixed-size chunks.
 
-> **Module import:** `github.com/pilacorp/nda-storage-sdk/did-encryption`
+> **Module import:** `github.com/pilacorp/nda-sfs-sdk/did-encryption`
 
 ## Installation
 
 ```bash
-go get github.com/pilacorp/nda-storage-sdk/did-encryption
+go get github.com/pilacorp/nda-sfs-sdk/did-encryption
 ```
 
-The module exposes packages under `pre`, `utils`, and `curve`. For most use
-cases you only need `pre` and `utils`.
+The module exposes packages under `didencrypt`, `utils`, and `curve`. For most use
+cases you only need `didencrypt` and `utils`.
 
 ## Basic example
 
@@ -31,8 +31,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/pilacorp/nda-storage-sdk/did-encryption/didencrypt"
-	"github.com/pilacorp/nda-storage-sdk/did-encryption/utils"
+	"github.com/pilacorp/nda-sfs-sdk/did-encryption/didencrypt"
+	"github.com/pilacorp/nda-sfs-sdk/did-encryption/utils"
 )
 
 func main() {
@@ -138,7 +138,7 @@ plaintext, err := aliceDecryptor.DecryptByOwner(ciphertext)
 
 ## Streaming support
 
-Package `pre` also exposes `EncryptStream` / `DecryptStream` for large files. These helpers break data into fixed-size chunks, encrypt each chunk with AES-GCM using unique nonces, and store chunk metadata inside the capsule. The companion example `examples/stream/main.go` demonstrates the full flow:
+Package `didencrypt` also exposes `EncryptStream` / `DecryptStream` for large files. These helpers break data into fixed-size chunks, encrypt each chunk with AES-GCM using unique nonces, and store chunk metadata inside the capsule. The companion example `examples/stream/main.go` demonstrates the full flow:
 
 ```go
 aliceSK, alicePK, err := utils.GenerateKeys()

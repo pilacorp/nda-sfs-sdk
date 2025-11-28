@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	pre "github.com/pilacorp/nda-sfs-sdk/did-encryption/didencrypt"
+	"github.com/pilacorp/nda-sfs-sdk/did-encryption/didencrypt"
 	"github.com/pilacorp/nda-sfs-sdk/did-encryption/utils"
 )
 
@@ -27,7 +27,7 @@ func main() {
 	var cipherBuf bytes.Buffer
 	chunkSize := uint32(64 * 1024) // 64 KiB frames
 
-	aliceEncryptor, capsule, err := pre.NewEncryptor(utils.PublicKeyToCompressedKey(alicePK), chunkSize)
+	aliceEncryptor, capsule, err := didencrypt.NewEncryptor(utils.PublicKeyToCompressedKey(alicePK), chunkSize)
 	if err != nil {
 		log.Fatalf("create alice encryptor: %v", err)
 	}
@@ -37,12 +37,12 @@ func main() {
 		log.Fatalf("encrypt stream: %v", err)
 	}
 
-	shareDataKey, err := pre.CreateReCapsule(utils.PrivateKeyToHexString(aliceSK), utils.PublicKeyToCompressedKey(bobPK), capsule)
+	shareDataKey, err := didencrypt.CreateReCapsule(utils.PrivateKeyToHexString(aliceSK), utils.PublicKeyToCompressedKey(bobPK), capsule)
 	if err != nil {
 		log.Fatalf("create share data key: %v", err)
 	}
 
-	bobDecryptor, err := pre.NewDecryptor(utils.PrivateKeyToHexString(bobSK), shareDataKey)
+	bobDecryptor, err := didencrypt.NewDecryptor(utils.PrivateKeyToHexString(bobSK), shareDataKey)
 	if err != nil {
 		log.Fatalf("create bob decryptor: %v", err)
 	}
@@ -52,7 +52,7 @@ func main() {
 		log.Fatalf("Failed to get Bob's decryptor hex: %v", err)
 	}
 
-	bobDecryptorFromHex, err := pre.NewDecryptorFromHex(hex)
+	bobDecryptorFromHex, err := didencrypt.NewDecryptorFromHex(hex)
 	if err != nil {
 		log.Fatalf("Failed to create Bob's decryptor from hex: %v", err)
 	}
