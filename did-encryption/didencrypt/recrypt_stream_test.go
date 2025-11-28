@@ -5,7 +5,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/pilacorp/nda-storage-sdk/did-encryption/utils"
+	"github.com/pilacorp/nda-sfs-sdk/did-encryption/utils"
 )
 
 func TestE2EStream(t *testing.T) {

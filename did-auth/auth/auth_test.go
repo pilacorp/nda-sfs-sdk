@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/pilacorp/nda-storage-sdk/did-auth/auth"
-	"github.com/pilacorp/nda-storage-sdk/did-auth/provider"
-	"github.com/pilacorp/nda-storage-sdk/did-auth/provider/ecdsa"
-	"github.com/pilacorp/nda-storage-sdk/did-auth/provider/vault"
+	"github.com/pilacorp/nda-sfs-sdk/did-auth/auth"
+	"github.com/pilacorp/nda-sfs-sdk/did-auth/provider"
+	"github.com/pilacorp/nda-sfs-sdk/did-auth/provider/ecdsa"
+	"github.com/pilacorp/nda-sfs-sdk/did-auth/provider/vault"
 )
 
 // TestNewAuth ensures NewAuth returns a non-nil Auth implementation.

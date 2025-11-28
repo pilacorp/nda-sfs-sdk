@@ -9,8 +9,8 @@ import (
 	"math/big"
 
 	crypt "github.com/ethereum/go-ethereum/crypto"
-	"github.com/pilacorp/nda-storage-sdk/did-encryption/curve"
-	"github.com/pilacorp/nda-storage-sdk/did-encryption/utils"
+	"github.com/pilacorp/nda-sfs-sdk/did-encryption/curve"
+	"github.com/pilacorp/nda-sfs-sdk/did-encryption/utils"
 )
 
 type Encryptor struct {

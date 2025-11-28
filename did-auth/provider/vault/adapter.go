@@ -3,8 +3,8 @@ package vault
 import (
 	"context"
 
-	"github.com/pilacorp/nda-storage-sdk/did-auth/provider"
-	"github.com/pilacorp/nda-storage-sdk/did-auth/vault"
+	"github.com/pilacorp/nda-sfs-sdk/did-auth/provider"
+	"github.com/pilacorp/nda-sfs-sdk/did-auth/vault"
 )
 
 // vaultProvider is the provider implementation that uses Vault for signing.

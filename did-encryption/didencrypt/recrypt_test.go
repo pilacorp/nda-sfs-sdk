@@ -3,7 +3,7 @@ package didencrypt
 import (
 	"testing"
 
-	"github.com/pilacorp/nda-storage-sdk/did-encryption/utils"
+	"github.com/pilacorp/nda-sfs-sdk/did-encryption/utils"
 )
 
 // TestE2E tests the complete encryption and decryption flow

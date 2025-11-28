@@ -4,8 +4,7 @@ import (
 	"bytes"
 	"math/big"
 
-	"github.com/pilacorp/nda-storage-sdk/did-encryption/curve"
-
+	"github.com/pilacorp/nda-sfs-sdk/did-encryption/curve"
 	"golang.org/x/crypto/sha3"
 )
 

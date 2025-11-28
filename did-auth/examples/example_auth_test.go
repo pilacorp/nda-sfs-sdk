@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/pilacorp/nda-storage-sdk/did-auth/auth"
-	"github.com/pilacorp/nda-storage-sdk/did-auth/provider"
-	"github.com/pilacorp/nda-storage-sdk/did-auth/provider/vault"
+	"github.com/pilacorp/nda-sfs-sdk/did-auth/auth"
+	"github.com/pilacorp/nda-sfs-sdk/did-auth/provider"
+	"github.com/pilacorp/nda-sfs-sdk/did-auth/provider/vault"
 )
 
 // ExampleNewAuth demonstrates how to create a new Auth instance.

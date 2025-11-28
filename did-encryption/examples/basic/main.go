@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/pilacorp/nda-storage-sdk/did-encryption/didencrypt"
-	"github.com/pilacorp/nda-storage-sdk/did-encryption/utils"
+	"github.com/pilacorp/nda-sfs-sdk/did-encryption/didencrypt"
+	"github.com/pilacorp/nda-sfs-sdk/did-encryption/utils"
 )
 
 func main() {

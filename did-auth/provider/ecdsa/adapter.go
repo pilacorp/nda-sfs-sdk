@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/pilacorp/nda-storage-sdk/did-auth/provider"
+	"github.com/pilacorp/nda-sfs-sdk/did-auth/provider"
 )
 
 // ProviderPriv is the provider implementation that uses a private key for signing.

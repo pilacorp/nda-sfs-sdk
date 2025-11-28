@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 
-	pre "github.com/pilacorp/nda-storage-sdk/did-encryption/didencrypt"
-	"github.com/pilacorp/nda-storage-sdk/did-encryption/utils"
+	pre "github.com/pilacorp/nda-sfs-sdk/did-encryption/didencrypt"
+	"github.com/pilacorp/nda-sfs-sdk/did-encryption/utils"
 )
 
 func main() {

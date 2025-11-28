@@ -1,4 +1,4 @@
-module github.com/pilacorp/nda-storage-sdk/did-encryption
+module github.com/pilacorp/nda-sfs-sdk/did-encryption
 
 go 1.24.6
 

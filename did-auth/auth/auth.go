@@ -9,7 +9,7 @@ import (
 	vcdto "github.com/pilacorp/go-credential-sdk/credential/common/dto"
 	"github.com/pilacorp/go-credential-sdk/credential/vc"
 	"github.com/pilacorp/go-credential-sdk/credential/vp"
-	"github.com/pilacorp/nda-storage-sdk/did-auth/provider"
+	"github.com/pilacorp/nda-sfs-sdk/did-auth/provider"
 )
 
 type Auth interface {
