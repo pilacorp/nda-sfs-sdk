@@ -5,7 +5,6 @@ import (
 	"math/big"
 
 	"github.com/pilacorp/nda-sfs-sdk/did-encryption/curve"
-
 	"golang.org/x/crypto/sha3"
 )
 
