@@ -20,6 +20,9 @@ profile.cov
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
+# SwiftPM build output
+.build/
+
 # Go workspace file
 go.work
 go.work.sum
@@ -34,4 +37,3 @@ go.work.sum
 # OS generated files
 .DS_Store
 .DS_Store?
-

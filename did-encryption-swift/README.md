@@ -18,17 +18,36 @@ This package lets you:
 
 ## Installation
 
-Add the package in your `Package.swift` dependencies:
+Use the monorepo URL with a release tag:
 
 ```swift
-.package(path: "../did-encryption-swift")
+.package(url: "https://github.com/pilacorp/nda-sfs-sdk.git", from: "1.0.0")
 ```
 
 Then add the product to your target:
 
 ```swift
-.product(name: "DIDEncrypt", package: "did-encryption-swift")
+.product(name: "DIDEncrypt", package: "nda-sfs-sdk")
 ```
+
+## Tagging For Swift Release (Monorepo)
+
+SwiftPM resolves this SDK from the repository root `Package.swift`, so publish a
+normal semver tag at repo level (not a folder-prefixed tag):
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Then client apps can consume with:
+
+```swift
+.package(url: "https://github.com/pilacorp/nda-sfs-sdk.git", from: "1.0.0")
+```
+
+If this monorepo also publishes Go modules, you can still keep Go submodule tags
+separately (for example `did-encryption/v1.0.0`) without affecting SwiftPM.
 
 ## Quick Start (Single Message)
 
@@ -161,4 +180,3 @@ print(decrypted == content) // true
 cd did-encryption-swift
 swift test --enable-swift-testing --disable-xctest
 ```
-
