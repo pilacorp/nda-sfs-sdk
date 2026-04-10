@@ -41,21 +41,22 @@ final class Secp256k1: @unchecked Sendable {
         return pub
     }
 
-    func serializePubkey(_ pub: secp256k1_pubkey, compressed: Bool) -> Data {
+    func serializePubkey(_ pub: secp256k1_pubkey, compressed: Bool) throws -> Data {
         var outLen = compressed ? 33 : 65
         var out = Data(repeating: 0, count: outLen)
         var pubCopy = pub
         let flags = compressed ? UInt32(SECP256K1_EC_COMPRESSED) : UInt32(SECP256K1_EC_UNCOMPRESSED)
 
-        _ = out.withUnsafeMutableBytes { outPtr in
+        let ok = out.withUnsafeMutableBytes { outPtr in
             secp256k1_ec_pubkey_serialize(
                 ctx,
                 outPtr.bindMemory(to: UInt8.self).baseAddress!,
                 &outLen,
                 &pubCopy,
                 flags
-            )
+            ) == 1
         }
+        guard ok else { throw DIDEncryptError.invalidPublicKey }
         if out.count != outLen { out = out.prefix(outLen) }
         return out
     }
@@ -112,7 +113,7 @@ struct Secp256k1PrivateKey: Equatable {
 
     func publicKeyUncompressed() throws -> Data {
         let pub = try Secp256k1.shared.createPubkey(seckey32: raw32)
-        return Secp256k1.shared.serializePubkey(pub, compressed: false)
+        return try Secp256k1.shared.serializePubkey(pub, compressed: false)
     }
 }
 
@@ -128,12 +129,12 @@ struct Secp256k1PublicKey: Equatable {
 
     static func fromCompressed(_ compressed33: Data) throws -> Secp256k1PublicKey {
         let pub = try Secp256k1.shared.parsePubkey(compressed33)
-        return try Secp256k1PublicKey(uncompressed65: Secp256k1.shared.serializePubkey(pub, compressed: false))
+        return try Secp256k1PublicKey(uncompressed65: try Secp256k1.shared.serializePubkey(pub, compressed: false))
     }
 
     func compressed33() throws -> Data {
         let pub = try Secp256k1.shared.parsePubkey(uncompressed65)
-        return Secp256k1.shared.serializePubkey(pub, compressed: true)
+        return try Secp256k1.shared.serializePubkey(pub, compressed: true)
     }
 }
 
@@ -141,13 +142,13 @@ func pointAdd(_ a: Secp256k1PublicKey, _ b: Secp256k1PublicKey) throws -> Secp25
     let pa = try Secp256k1.shared.parsePubkey(a.uncompressed65)
     let pb = try Secp256k1.shared.parsePubkey(b.uncompressed65)
     let out = try Secp256k1.shared.pubkeyCombine(pa, pb)
-    return try Secp256k1PublicKey(uncompressed65: Secp256k1.shared.serializePubkey(out, compressed: false))
+    return try Secp256k1PublicKey(uncompressed65: try Secp256k1.shared.serializePubkey(out, compressed: false))
 }
 
 func pointMul(_ a: Secp256k1PublicKey, scalar32: Data) throws -> Secp256k1PublicKey {
     let pa = try Secp256k1.shared.parsePubkey(a.uncompressed65)
     let out = try Secp256k1.shared.pubkeyTweakMul(pa, tweak32: scalar32)
-    return try Secp256k1PublicKey(uncompressed65: Secp256k1.shared.serializePubkey(out, compressed: false))
+    return try Secp256k1PublicKey(uncompressed65: try Secp256k1.shared.serializePubkey(out, compressed: false))
 }
 
 func baseMul(_ scalar32: Data) throws -> Secp256k1PublicKey {

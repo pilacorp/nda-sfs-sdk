@@ -7,7 +7,7 @@ public struct Decryptor: Equatable {
 
     public func decrypt(_ ciphertext: Data) throws -> Data {
         if chunkSize > 0 { throw DIDEncryptError.streamModeNotAllowed }
-        return try aesGcmDecrypt(ciphertextAndTag: ciphertext, key32: aesKey32, nonce12: baseNonce12)
+        return try aesGcmDecrypt(ciphertextAndTag: ciphertext, key32: aesKey32)
     }
 
     public func decryptByOwner(_ ciphertext: Data) throws -> Data {
@@ -66,7 +66,13 @@ public struct Decryptor: Equatable {
         let aes = Data(data.prefix(32))
         let nonce = Data(data.subdata(in: 32..<44))
         let csData = data.suffix(4)
-        let cs = csData.withUnsafeBytes { $0.load(as: UInt32.self) }.littleEndian
+        let cs = csData.withUnsafeBytes { raw in
+            let bytes = raw.bindMemory(to: UInt8.self)
+            return UInt32(bytes[0])
+                | (UInt32(bytes[1]) << 8)
+                | (UInt32(bytes[2]) << 16)
+                | (UInt32(bytes[3]) << 24)
+        }
         return Decryptor(aesKey32: aes, baseNonce12: nonce, chunkSize: cs)
     }
 }

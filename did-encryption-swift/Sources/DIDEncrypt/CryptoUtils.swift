@@ -1,12 +1,8 @@
 import Foundation
-import CryptoKit
 import CryptoSwift
 import BigInt
 
 func sha3_256(_ message: Data) -> Data {
-    if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
-        return Data(SHA3_256.hash(data: message))
-    }
     let digest = SHA3(variant: .sha256).calculate(for: Array(message))
     return Data(digest)
 }

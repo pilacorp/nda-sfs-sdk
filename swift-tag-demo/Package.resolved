@@ -1,5 +1,5 @@
 {
-  "originHash" : "fa9808b862cda1160eae5658da643737e2b7220b0e38e0f95aa422b637e00673",
+  "originHash" : "fee640bb5d0ef6fda1cbfd4e7f88a6517a478eb10896c00567a3074bc13e3adc",
   "pins" : [
     {
       "identity" : "bigint",
@@ -17,6 +17,14 @@
       "state" : {
         "revision" : "e45a26384239e028ec87fbcc788f513b67e10d8f",
         "version" : "1.9.0"
+      }
+    },
+    {
+      "identity" : "nda-sfs-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pilacorp/nda-sfs-sdk.git",
+      "state" : {
+        "revision" : "68409381cbb5f258e6b58dae88126f5356be1cc7"
       }
     },
     {

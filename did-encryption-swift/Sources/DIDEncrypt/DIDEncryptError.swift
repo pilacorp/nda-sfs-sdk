@@ -7,10 +7,10 @@ public enum DIDEncryptError: Error, Equatable {
     case invalidPublicKey
     case invalidCapsule
     case invalidReCapsule
+    case chunkSizeOutOfRange
     case chunkSizeNotSet
     case streamModeNotAllowed
     case invalidCiphertext
     case capsuleMismatch
     case truncatedStream
 }
-

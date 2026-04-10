@@ -16,7 +16,7 @@ let package = Package(
         .package(url: "https://github.com/attaswift/BigInt.git", from: "5.4.0"),
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.0"),
         .package(url: "https://github.com/GigaBitcoin/secp256k1.swift.git", from: "0.23.0"),
-        .package(url: "https://github.com/swiftlang/swift-testing.git", revision: "c9d57c8"),
+        .package(url: "https://github.com/swiftlang/swift-testing.git", revision: "c9d57c83568b06da229ed24339a6228e8e3b438b"),
     ],
     targets: [
         .target(

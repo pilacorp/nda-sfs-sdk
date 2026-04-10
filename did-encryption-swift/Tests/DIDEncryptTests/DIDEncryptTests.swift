@@ -106,6 +106,49 @@ private func expectDIDError(
     }
 }
 
+@Test func malformedCapsuleFieldsFail() throws {
+    let owner = try DIDEncrypt.generateKeys()
+
+    let (_, capsule) = try DIDEncrypt.newEncryptor(
+        ownerPublicKeyCompressedHex: owner.publicKeyCompressedHex,
+        chunkSize: 0
+    )
+
+    var malformed = capsule
+    malformed[0] = 31
+    expectDIDError(.invalidCapsule) {
+        _ = try DIDEncrypt.newDecryptorByOwner(ownerPrivateKeyHex: owner.privateKeyHex, capsule: malformed)
+    }
+}
+
+@Test func oversizedChunkSizeIsRejected() throws {
+    let owner = try DIDEncrypt.generateKeys()
+    expectDIDError(.chunkSizeOutOfRange) {
+        _ = try DIDEncrypt.newEncryptor(
+            ownerPublicKeyCompressedHex: owner.publicKeyCompressedHex,
+            chunkSize: didEncryptMaxChunkSize + 1
+        )
+    }
+}
+
+@Test func nonStreamEncryptionUsesFreshNonce() throws {
+    let owner = try DIDEncrypt.generateKeys()
+    let message = Data("nonce-check".utf8)
+
+    let (enc, capsule) = try DIDEncrypt.newEncryptor(
+        ownerPublicKeyCompressedHex: owner.publicKeyCompressedHex,
+        chunkSize: 0
+    )
+
+    let first = try enc.encrypt(message)
+    let second = try enc.encrypt(message)
+    #expect(first != second)
+
+    let dec = try DIDEncrypt.newDecryptorByOwner(ownerPrivateKeyHex: owner.privateKeyHex, capsule: capsule)
+    #expect(try dec.decrypt(first) == message)
+    #expect(try dec.decrypt(second) == message)
+}
+
 @Test func wrongModeGuards() throws {
     let owner = try DIDEncrypt.generateKeys()
     let message = Data("mode-check".utf8)

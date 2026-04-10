@@ -28,7 +28,13 @@ struct ByteReader {
         guard offset + n <= data.count else { throw DIDEncryptError.truncatedStream }
         let sub = data.subdata(in: offset..<(offset + n))
         offset += n
-        return sub.withUnsafeBytes { $0.load(as: UInt32.self) }.littleEndian
+        return sub.withUnsafeBytes { raw in
+            let bytes = raw.bindMemory(to: UInt8.self)
+            return UInt32(bytes[0])
+                | (UInt32(bytes[1]) << 8)
+                | (UInt32(bytes[2]) << 16)
+                | (UInt32(bytes[3]) << 24)
+        }
     }
 
     mutating func readUInt8() throws -> UInt8 {
@@ -45,4 +51,3 @@ struct ByteReader {
         return sub
     }
 }
-

@@ -88,6 +88,8 @@ print(String(data: plaintext, encoding: .utf8) ?? "")
 
 ## Decryptor Serialization
 
+Warning: `Decryptor.hex()` serializes secret key material. Only use it for tightly controlled local persistence, never for logs, telemetry, or transport.
+
 ```swift
 // Serialize
 let hex = bobDecryptor.hex()

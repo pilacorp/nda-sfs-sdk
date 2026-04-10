@@ -8,7 +8,7 @@ let package = Package(
         .macOS(.v12),
     ],
     dependencies: [
-        .package(url: "https://github.com/pilacorp/nda-sfs-sdk.git", revision: "917b5ac82e0094562750611945d580cded346734"),
+        .package(url: "https://github.com/pilacorp/nda-sfs-sdk.git", revision: "68409381cbb5f258e6b58dae88126f5356be1cc7"),
     ],
     targets: [
         .executableTarget(

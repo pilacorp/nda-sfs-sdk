@@ -1,6 +1,8 @@
 import Foundation
 import BigInt
 
+let didEncryptMaxChunkSize: UInt32 = 16 * 1024 * 1024
+
 struct Capsule: Equatable {
     let E: Secp256k1PublicKey
     let V: Secp256k1PublicKey
@@ -35,27 +37,33 @@ func decodeCapsule(_ data: Data) throws -> Capsule {
     var r = ByteReader(data)
 
     let eXLen = Int(try r.readUInt32LE())
+    guard eXLen == 32 else { throw DIDEncryptError.invalidCapsule }
     let eX = try r.readBytes(count: eXLen)
     let eYLen = Int(try r.readUInt32LE())
+    guard eYLen == 32 else { throw DIDEncryptError.invalidCapsule }
     let eY = try r.readBytes(count: eYLen)
 
     let vXLen = Int(try r.readUInt32LE())
+    guard vXLen == 32 else { throw DIDEncryptError.invalidCapsule }
     let vX = try r.readBytes(count: vXLen)
     let vYLen = Int(try r.readUInt32LE())
+    guard vYLen == 32 else { throw DIDEncryptError.invalidCapsule }
     let vY = try r.readBytes(count: vYLen)
 
     let sLen = Int(try r.readUInt32LE())
+    guard sLen == 32 else { throw DIDEncryptError.invalidCapsule }
     let sBytes = try r.readBytes(count: sLen)
 
     let chunkSize = try r.readUInt32LE()
     let version = try r.readUInt8()
+    guard version == 0 else { throw DIDEncryptError.invalidCapsule }
+    guard r.offset == data.count else { throw DIDEncryptError.invalidCapsule }
+    guard chunkSize == 0 || chunkSize <= didEncryptMaxChunkSize else { throw DIDEncryptError.chunkSizeOutOfRange }
 
     func makePub(x: Data, y: Data) throws -> Secp256k1PublicKey {
-        let xx = x.count < 32 ? (Data(repeating: 0, count: 32 - x.count) + x) : x
-        let yy = y.count < 32 ? (Data(repeating: 0, count: 32 - y.count) + y) : y
         var d = Data([0x04])
-        d.append(xx.prefix(32))
-        d.append(yy.prefix(32))
+        d.append(x)
+        d.append(y)
         return try Secp256k1PublicKey(uncompressed65: d)
     }
 
@@ -67,4 +75,3 @@ func decodeCapsule(_ data: Data) throws -> Capsule {
         version: version
     )
 }
-

@@ -7,7 +7,7 @@ public struct Encryptor: Equatable {
 
     public func encrypt(_ data: Data) throws -> Data {
         if chunkSize > 0 { throw DIDEncryptError.streamModeNotAllowed }
-        return try aesGcmEncrypt(plaintext: data, key32: aesKey32, nonce12: baseNonce12)
+        return try aesGcmEncrypt(plaintext: data, key32: aesKey32)
     }
 
     public func encryptStream(input: InputStream, output: OutputStream) throws {

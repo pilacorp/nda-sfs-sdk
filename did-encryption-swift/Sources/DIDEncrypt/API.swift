@@ -9,6 +9,9 @@ public struct DIDEncrypt {
     }
 
     public static func newEncryptor(ownerPublicKeyCompressedHex: String, chunkSize: UInt32) throws -> (encryptor: Encryptor, capsule: Data) {
+        guard chunkSize == 0 || chunkSize <= didEncryptMaxChunkSize else {
+            throw DIDEncryptError.chunkSizeOutOfRange
+        }
         let pubData = try ownerPublicKeyCompressedHex.didEncryptHexData()
         let ownerPub = try Secp256k1PublicKey.fromCompressed(pubData)
         let (cap, keyBytes) = try generateAESKey(ownerPub: ownerPub, chunkSize: chunkSize)
@@ -20,7 +23,7 @@ public struct DIDEncrypt {
     }
 
     public static func createReCapsule(ownerPrivateKeyHex: String, receiverPublicKeyCompressedHex: String, capsule: Data) throws -> Data {
-        let ownerPriv = try Secp256k1PrivateKey(raw32: try ownerPrivateKeyHex.didEncryptHexData().leftPadOrTrim(to: 32))
+        let ownerPriv = try Secp256k1PrivateKey(raw32: try ownerPrivateKeyHex.didEncryptHexData().normalizedPrivateKeyBytes())
         let recvPub = try Secp256k1PublicKey.fromCompressed(try receiverPublicKeyCompressedHex.didEncryptHexData())
 
         let cap = try decodeCapsule(capsule)
@@ -37,7 +40,7 @@ public struct DIDEncrypt {
         if reCapsule.count != 250 {
             throw DIDEncryptError.invalidLength(expected: 250, actual: reCapsule.count)
         }
-        let priv = try Secp256k1PrivateKey(raw32: try receiverPrivateKeyHex.didEncryptHexData().leftPadOrTrim(to: 32))
+        let priv = try Secp256k1PrivateKey(raw32: try receiverPrivateKeyHex.didEncryptHexData().normalizedPrivateKeyBytes())
 
         let cap = try decodeCapsule(Data(reCapsule.prefix(185)))
         let pubX = try Secp256k1PublicKey(uncompressed65: Data(reCapsule.suffix(65)))
@@ -50,7 +53,7 @@ public struct DIDEncrypt {
         if capsule.count != 185 {
             throw DIDEncryptError.invalidLength(expected: 185, actual: capsule.count)
         }
-        let priv = try Secp256k1PrivateKey(raw32: try ownerPrivateKeyHex.didEncryptHexData().leftPadOrTrim(to: 32))
+        let priv = try Secp256k1PrivateKey(raw32: try ownerPrivateKeyHex.didEncryptHexData().normalizedPrivateKeyBytes())
         let cap = try decodeCapsule(capsule)
 
         let keyBytes = try decryptAESKeyByOwner(ownerPriv: priv, capsule: cap)
@@ -59,9 +62,9 @@ public struct DIDEncrypt {
 }
 
 private extension Data {
-    func leftPadOrTrim(to length: Int) -> Data {
-        if count == length { return self }
-        if count > length { return suffix(length) }
-        return Data(repeating: 0, count: length - count) + self
+    func normalizedPrivateKeyBytes() throws -> Data {
+        if count == 32 { return self }
+        if count > 32 { throw DIDEncryptError.invalidLength(expected: 32, actual: count) }
+        return Data(repeating: 0, count: 32 - count) + self
     }
 }
