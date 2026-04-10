@@ -31,6 +31,7 @@ let package = Package(
             name: "DIDEncryptTests",
             dependencies: [
                 "DIDEncrypt",
+                .product(name: "BigInt", package: "BigInt"),
                 .product(name: "Testing", package: "swift-testing"),
             ]
         ),
